@@ -132,6 +132,18 @@ const Register = () => {
                       onChange={HandleChange}
                     />
                   </CInputGroup>
+                  {/* address */}
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>
+                      <CIcon icon={cilLockLocked} />
+                    </CInputGroupText>
+                    <CFormInput
+                      type="text"
+                      placeholder="Adress"
+                      name="user_address"
+                      onChange={HandleChange}
+                    />
+                  </CInputGroup>
                   {error && <div style={{ color: 'red' }}>{error}</div>}
                   <div className="d-grid">
                     <CButton color="success" onClick={register}>
