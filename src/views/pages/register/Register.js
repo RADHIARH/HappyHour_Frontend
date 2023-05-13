@@ -1,4 +1,6 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -13,8 +15,41 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+// import axios
+import axios from 'axios'
+//
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
+  const navigate = useNavigate()
+  const [User, setUser] = useState({
+    username: '',
+    email: '',
+    user_password: '',
+    firstname: '',
+    lastname: '',
+    phone: '',
+    user_address: '',
+  })
+  const HandleChange = (event) => {
+    setUser({
+      ...User,
+      [event.target.name]: event.target.value,
+    })
+  }
+  const register = async (e) => {
+    e.preventDefault()
+    await axios
+      .post('https://project-happhour.vercel.app/register', User)
+      .then((response) => navigate('/login'))
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  useEffect(() => {
+    console.log(User)
+  }, [User])
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -25,16 +60,20 @@ const Register = () => {
                 <CForm>
                   <h1>Register</h1>
                   <p className="text-medium-emphasis">Create your account</p>
+                  {/* username */}
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput placeholder="Username" autoComplete="username" />
+
+                    <CFormInput placeholder="Username" name="username" onChange={HandleChange} />
                   </CInputGroup>
+                  {/* email */}
                   <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="Email" autoComplete="email" />
+                    <CFormInput placeholder="Email" name="email" onChange={HandleChange} />
                   </CInputGroup>
+                  {/* // password  */}
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
@@ -42,21 +81,51 @@ const Register = () => {
                     <CFormInput
                       type="password"
                       placeholder="Password"
-                      autoComplete="new-password"
+                      name="user_password"
+                      onChange={HandleChange}
                     />
                   </CInputGroup>
-                  <CInputGroup className="mb-4">
+                  {/* // firstname  */}
+                  <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
                     <CFormInput
-                      type="password"
-                      placeholder="Repeat password"
-                      autoComplete="new-password"
+                      type="text"
+                      placeholder="Firstname"
+                      name="firstname"
+                      onChange={HandleChange}
                     />
                   </CInputGroup>
+                  {/* // lastname  */}
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>
+                      <CIcon icon={cilLockLocked} />
+                    </CInputGroupText>
+                    <CFormInput
+                      type="text"
+                      placeholder="Lastname"
+                      name="lastname"
+                      onChange={HandleChange}
+                    />
+                  </CInputGroup>
+                  {/* // phone  */}
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>
+                      <CIcon icon={cilLockLocked} />
+                    </CInputGroupText>
+                    <CFormInput
+                      type="text"
+                      placeholder="Phone"
+                      name="phone"
+                      onChange={HandleChange}
+                    />
+                  </CInputGroup>
+
                   <div className="d-grid">
-                    <CButton color="success">Create Account</CButton>
+                    <CButton color="success" onClick={register}>
+                      Create Account
+                    </CButton>
                   </div>
                 </CForm>
               </CCardBody>

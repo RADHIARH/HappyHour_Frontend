@@ -1,5 +1,7 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -15,8 +17,39 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+// import axios
+import axios from 'axios'
 
 const Login = () => {
+  const navigate = useNavigate()
+  // states
+  const [User, setUser] = useState({
+    username: '',
+    password: '',
+  })
+  const HandleChange = (e) => {
+    setUser({
+      ...User,
+      [e.target.name]: e.target.value,
+    })
+  }
+  const login = async (e) => {
+    e.preventDefault()
+    await axios
+      .post('https://project-happhour.vercel.app/login', User, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => localStorage.setItem('happyToken', response.data.token),
+        navigate('/dashboard'),
+      )
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -32,21 +65,24 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      {/* username */}
+                      <CFormInput placeholder="Username" name="username" onChange={HandleChange} />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
+                      {/* password */}
                       <CFormInput
                         type="password"
                         placeholder="Password"
-                        autoComplete="current-password"
+                        name="password"
+                        onChange={HandleChange}
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton color="primary" className="px-4" onClick={login}>
                           Login
                         </CButton>
                       </CCol>
