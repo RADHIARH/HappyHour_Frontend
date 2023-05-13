@@ -31,6 +31,7 @@ const Register = () => {
     phone: '',
     user_address: '',
   })
+  const [error, setError] = useState('')
   const HandleChange = (event) => {
     setUser({
       ...User,
@@ -39,16 +40,26 @@ const Register = () => {
   }
   const register = async (e) => {
     e.preventDefault()
-    await axios
-      .post('https://project-happhour.vercel.app/register', User)
-      .then((response) => navigate('/login'))
-      .catch((err) => {
-        console.log(err)
-      })
+    //   try {
+    //     const { data } = await axios.post('https://project-happhour.vercel.app/register', User)
+    //   } catch (error) {
+    //     setError('user already exist')
+    //   }
+    // }
+
+    try {
+      const url = 'https://project-happhour.vercel.app/register'
+      const { data } = await axios.post(url, User)
+      navigate('/login')
+    } catch (error) {
+      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+        setError(error.response.data.message)
+      }
+    }
   }
   useEffect(() => {
-    console.log(User)
-  }, [User])
+    console.log(error)
+  }, [])
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -121,7 +132,7 @@ const Register = () => {
                       onChange={HandleChange}
                     />
                   </CInputGroup>
-
+                  {error && <div style={{ color: 'red' }}>{error}</div>}
                   <div className="d-grid">
                     <CButton color="success" onClick={register}>
                       Create Account

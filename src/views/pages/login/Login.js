@@ -22,6 +22,7 @@ import axios from 'axios'
 
 const Login = () => {
   const navigate = useNavigate()
+  const [error, setError] = useState('')
   // states
   const [User, setUser] = useState({
     username: '',
@@ -34,20 +35,23 @@ const Login = () => {
     })
   }
   const login = async (e) => {
-    e.preventDefault()
-    await axios
-      .post('https://project-happhour.vercel.app/login', User, {
+    try {
+      e.preventDefault()
+      const { data } = await axios.post('https://project-happhour.vercel.app/login', User, {
         headers: {
           'Content-Type': 'application/json',
         },
       })
-      .then(
-        (response) => localStorage.setItem('happyToken', response.data.token),
-        navigate('/dashboard'),
-      )
-      .catch((err) => {
-        console.log(err)
-      })
+      const token = data.token
+      localStorage.setItem('happytoken', token)
+      if (data.user.id_role === 1) {
+        navigate('/dashboard')
+      }
+    } catch (error) {
+      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+        setError(error.response.data.message)
+      }
+    }
   }
 
   return (
@@ -80,6 +84,7 @@ const Login = () => {
                         onChange={HandleChange}
                       />
                     </CInputGroup>
+                    {error && <div style={{ color: 'red' }}>{error}</div>}
                     <CRow>
                       <CCol xs={6}>
                         <CButton color="primary" className="px-4" onClick={login}>
