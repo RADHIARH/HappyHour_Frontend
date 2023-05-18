@@ -3,11 +3,13 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { adduser } from 'src/redux/userSlice'
-import { deleteuser, edituser } from 'src/redux/userSlice'
 import { fetchContent } from 'src/redux/userAPIslice'
+import { deleteuser } from 'src/redux/userAPIslice'
+import { edituser } from 'src/redux/userAPIslice'
 import axios from 'axios'
 import * as icon from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import './style.css'
 import {
   CAvatar,
   CButton,
@@ -25,6 +27,9 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  cilColorBorder,
+  cilPlus,
+  cilX,
 } from '@coreui/react'
 
 const Users = () => {
@@ -49,24 +54,24 @@ const Users = () => {
   //     }
   //   }
   // }
-  const addnewuser = () => {
-    dispatch(
-      adduser({
-        id: 2,
-        username: 'maha',
-        email: 'maha@gmail.com',
-      }),
-    )
-  }
-  const edit = () => {
-    dispatch(
-      edituser({
-        id: 1,
-        username: 'rouroru',
-        email: 'rourou@gmail.com',
-      }),
-    )
-  }
+  // const addnewuser = () => {
+  //   dispatch(
+  //     adduser({
+  //       id: 2,
+  //       username: 'maha',
+  //       email: 'maha@gmail.com',
+  //     }),
+  //   )
+  // }
+  // const edit = () => {
+  //   dispatch(
+  //     edituser({
+  //       id: 1,
+  //       username: 'rouroru',
+  //       email: 'rourou@gmail.com',
+  //     }),
+  //   )
+  // }
   // useEffect(() => {
   //   getAllUsers()
   //   console.log('users' + state)
@@ -78,7 +83,6 @@ const Users = () => {
     <>
       <CRow>
         <CCol xs>
-          <h1>hello hello </h1>
           {/* {state.map((element) => {
             return (
               <div key={element.id} style={{ display: 'flex' }}>
@@ -99,8 +103,16 @@ const Users = () => {
             })}
           </div> */}
           <CCard className="mb-4">
-            {error && <div style={{ color: 'red' }}>{error}</div>}
-            <CCardHeader>Users List</CCardHeader>
+            {error && <div style={{ color: 'red' }}>{error}</div>}{' '}
+            <CCardHeader style={{ display: 'flex' }}>
+              <div>Users List</div>
+              <div style={{ position: 'absolute', right: 0 }}>
+                <button style={{}}>
+                  <CIcon icon={icon.cilPlus} style={{ fontsize: '20px' }}></CIcon>
+                  ADD new user
+                </button>
+              </div>
+            </CCardHeader>
             <CCardBody>
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
@@ -141,7 +153,27 @@ const Users = () => {
                       <CTableDataCell>{item.user_address}</CTableDataCell>
                       <CTableDataCell>
                         {' '}
-                        <CIcon icon={icon.cilList} size="xxl" />
+                        <button
+                          onClick={() =>
+                            dispatch(
+                              edituser({
+                                id: item.id,
+                                username: 'blabla',
+                                email: 'email@gmail.com',
+                              }),
+                            )
+                          }
+                        >
+                          {' '}
+                          <CIcon
+                            icon={icon.cilColorBorder}
+                            style={{ marginRight: 20 }}
+                            size="xxl"
+                          />
+                        </button>
+                        <button onClick={() => dispatch(deleteuser({ id: item.id }))}>
+                          <CIcon icon={icon.cilX} size="xxl" />
+                        </button>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
