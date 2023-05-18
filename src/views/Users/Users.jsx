@@ -1,6 +1,10 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { adduser } from 'src/redux/userSlice'
+import { deleteuser, edituser } from 'src/redux/userSlice'
+import { fetchContent } from 'src/redux/userAPIslice'
 import axios from 'axios'
 import * as icon from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
@@ -26,31 +30,74 @@ import {
 const Users = () => {
   const [users, setusers] = useState([])
   const [error, setError] = useState('')
+  const state = useSelector((state) => state.user.users)
+  const content = useSelector((state) => state.content.contents)
+  const dispatch = useDispatch()
   // get token from localhost
   const token = localStorage.getItem('happytoken')
-  const getAllUsers = async () => {
-    try {
-      const { data } = await axios.get('https://project-happhour.vercel.app/users', {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      setusers(data)
-    } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-        setError(error.response.data.message)
-      }
-    }
+  // const getAllUsers = async () => {
+  //   try {
+  //     const { data } = await axios.get('https://project-happhour.vercel.app/users', {
+  //       headers: {
+  //         authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     setusers(data)
+  //   } catch (error) {
+  //     if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+  //       setError(error.response.data.message)
+  //     }
+  //   }
+  // }
+  const addnewuser = () => {
+    dispatch(
+      adduser({
+        id: 2,
+        username: 'maha',
+        email: 'maha@gmail.com',
+      }),
+    )
   }
+  const edit = () => {
+    dispatch(
+      edituser({
+        id: 1,
+        username: 'rouroru',
+        email: 'rourou@gmail.com',
+      }),
+    )
+  }
+  // useEffect(() => {
+  //   getAllUsers()
+  //   console.log('users' + state)
+  // }, [state])
   useEffect(() => {
-    getAllUsers()
-    console.log('users' + users)
-  }, [])
-
+    dispatch(fetchContent())
+  }, [dispatch])
   return (
     <>
       <CRow>
         <CCol xs>
+          <h1>hello hello </h1>
+          {/* {state.map((element) => {
+            return (
+              <div key={element.id} style={{ display: 'flex' }}>
+                <h1>{element.username}</h1>
+                <h1>{element.email}</h1>
+                <button onClick={() => dispatch(deleteuser({ id: element.id }))}> delete</button>
+                <button onClick={edit}> edit</button>
+              </div>
+            )
+          })}
+          <div>
+            <button onClick={addnewuser}>add</button>
+          </div> */}
+          {/* <div>
+            <h1>import data from api</h1>
+            {content.map((element) => {
+              return <>{element.username}</>
+            })}
+          </div> */}
           <CCard className="mb-4">
             {error && <div style={{ color: 'red' }}>{error}</div>}
             <CCardHeader>Users List</CCardHeader>
@@ -72,7 +119,7 @@ const Users = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {users.map((item, index) => (
+                  {content.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       {/* logo */}
                       {/* <CTableDataCell className="text-center">
