@@ -46,19 +46,6 @@ const Users = () => {
       }
     }
   }
-  // delete user
-  const deleteUser = async (id) => {
-    try {
-      await axios.delete(`https://project-happhour.vercel.app/users/${id}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      getAllUsers()
-    } catch (err) {
-      console.log(err)
-    }
-  }
   const edit = (id) => {
     navigate(`/edituser/${id}`)
   }
@@ -96,9 +83,7 @@ const Users = () => {
           <CCard className="mb-4">
             {error && <div style={{ color: 'red' }}>{error}</div>}{' '}
             <CCardHeader style={{ display: 'flex' }}>
-              <div>
-                <h4>Users List</h4>
-              </div>
+              <div>Users List</div>
               <div style={{ position: 'absolute', right: 0 }}>
                 <button style={{}}>
                   <CIcon icon={icon.cilPlus} style={{ fontsize: '20px' }}></CIcon>
@@ -150,7 +135,7 @@ const Users = () => {
                             size="xxl"
                           />
                         </button>
-                        <button onClick={() => deleteUser(item.id)}>
+                        <button onClick={() => dispatch(deleteuser({ id: item.id }))}>
                           <CIcon icon={icon.cilX} size="xxl" />
                         </button>
                       </CTableDataCell>

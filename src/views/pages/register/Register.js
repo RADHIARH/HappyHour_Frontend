@@ -12,6 +12,10 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
@@ -22,6 +26,13 @@ import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const navigate = useNavigate()
+  const HandleSelect = (e) => {
+    setUser({
+      ...User,
+      role: e.target.value,
+    })
+    console.log(e.target.value)
+  }
   const [User, setUser] = useState({
     username: '',
     email: '',
@@ -30,6 +41,7 @@ const Register = () => {
     lastname: '',
     phone: '',
     user_address: '',
+    role: 2,
   })
   const [error, setError] = useState('')
   const HandleChange = (event) => {
@@ -38,6 +50,7 @@ const Register = () => {
       [event.target.name]: event.target.value,
     })
   }
+
   const register = async (e) => {
     e.preventDefault()
     //   try {
@@ -49,6 +62,7 @@ const Register = () => {
 
     try {
       const url = 'https://project-happhour.vercel.app/register'
+      console.log(User)
       const { data } = await axios.post(url, User)
       navigate('/login')
     } catch (error) {
@@ -59,6 +73,7 @@ const Register = () => {
   }
   useEffect(() => {
     console.log(error)
+    console.log('selected' + User.role)
   }, [])
 
   return (
@@ -144,6 +159,19 @@ const Register = () => {
                       onChange={HandleChange}
                     />
                   </CInputGroup>
+                  {/* <CDropdown className="mb-3">
+                    <CDropdownToggle color="secondary">Choose role</CDropdownToggle>
+                    <CDropdownMenu>
+                      <CDropdownItem value="user" onChange={(e) => setselectedValue(e)}>
+                        User
+                      </CDropdownItem>
+                      <CDropdownItem value="manager">Manager </CDropdownItem>
+                    </CDropdownMenu>
+                  </CDropdown> */}
+                  <select value={User.role} onChange={HandleSelect}>
+                    <option value={2}>User</option>
+                    <option value={3}>Manager</option>
+                  </select>
                   {error && <div style={{ color: 'red' }}>{error}</div>}
                   <div className="d-grid">
                     <CButton color="success" onClick={register}>

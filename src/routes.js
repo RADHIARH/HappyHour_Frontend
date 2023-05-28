@@ -1,9 +1,15 @@
 import React from 'react'
+import AddEtab from './views/Etabs/AddEtab'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 const Users = React.lazy(() => import('./views/Users/Users'))
+const editUser = React.lazy(() => import('./views/Users/EditUser'))
+const Managers = React.lazy(() => import('./views/Managers/Managers'))
+const Etabs = React.lazy(() => import('./views/Etabs/Etabs'))
+const editEtab = React.lazy(() => import('./views/Etabs/EditEtab'))
+const addEtab = React.lazy(() => import('./views/Etabs/AddEtab'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -55,6 +61,11 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/users', name: 'Users', element: Users },
+  { path: '/managers', name: 'Mangers', element: Managers },
+  { path: '/etabs', name: 'Etabs', element: Etabs },
+  { path: '/edituser/:id', name: 'Edituser', element: editUser },
+  { path: '/edit/etab/:id', name: 'EditEtab', element: editEtab },
+  { path: '/add/etab', name: 'AddEtab', element: addEtab },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },

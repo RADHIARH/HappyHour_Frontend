@@ -2,9 +2,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchContent } from 'src/redux/userAPIslice'
-import { deleteuser } from 'src/redux/userAPIslice'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import * as icon from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
@@ -23,53 +21,42 @@ import {
   CTableRow,
 } from '@coreui/react'
 
-const Users = () => {
-  const [users, setusers] = useState([])
-  const [error, setError] = useState('')
-  const state = useSelector((state) => state.user.users)
-  const content = useSelector((state) => state.content.contents)
-  const dispatch = useDispatch()
+const Managers = () => {
   const navigate = useNavigate()
   // get token from localhost
   const token = localStorage.getItem('happytoken')
-  const getAllUsers = async () => {
+  // use params
+  const { id } = useParams()
+  const [managers, setmanagers] = useState([])
+  const getAllManagers = async () => {
     try {
-      const { data } = await axios.get('https://project-happhour.vercel.app/users', {
+      const { data } = await axios.get('https://project-happhour.vercel.app/managers', {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      setusers(data)
-    } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-        setError(error.response.data.message)
-      }
+      setmanagers(data)
+    } catch (err) {
+      console.log(err)
     }
   }
-  // delete user
-  const deleteUser = async (id) => {
+  // delete manager
+  const deleteManager = async (id) => {
     try {
       await axios.delete(`https://project-happhour.vercel.app/users/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      getAllUsers()
+      getAllManagers()
     } catch (err) {
       console.log(err)
     }
   }
-  const edit = (id) => {
-    navigate(`/edituser/${id}`)
-  }
-  // use effect
   useEffect(() => {
-    getAllUsers()
-    console.log('users' + users)
+    getAllManagers()
+    console.log(managers)
   }, [])
-  // useEffect(() => {
-  //   dispatch(fetchContent())
-  // }, [dispatch])
   return (
     <>
       <CRow>
@@ -94,16 +81,15 @@ const Users = () => {
             })}
           </div> */}
           <CCard className="mb-4">
-            {error && <div style={{ color: 'red' }}>{error}</div>}{' '}
             <CCardHeader style={{ display: 'flex' }}>
               <div>
-                <h4>Users List</h4>
+                <h4>Managers List</h4>
               </div>
               <div style={{ position: 'absolute', right: 0 }}>
-                <button style={{}}>
+                {/* <button style={{}}>
                   <CIcon icon={icon.cilPlus} style={{ fontsize: '20px' }}></CIcon>
                   ADD new user
-                </button>
+                </button> */}
               </div>
             </CCardHeader>
             <CCardBody>
@@ -124,7 +110,7 @@ const Users = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {users.map((item, index) => (
+                  {managers.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       {/* // username */}
                       <CTableDataCell>
@@ -142,7 +128,7 @@ const Users = () => {
                       <CTableDataCell>{item.user_address}</CTableDataCell>
                       <CTableDataCell>
                         {' '}
-                        <button onClick={() => edit(item.id)}>
+                        <button>
                           {' '}
                           <CIcon
                             icon={icon.cilColorBorder}
@@ -150,7 +136,7 @@ const Users = () => {
                             size="xxl"
                           />
                         </button>
-                        <button onClick={() => deleteUser(item.id)}>
+                        <button onClick={() => deleteManager(item.id)}>
                           <CIcon icon={icon.cilX} size="xxl" />
                         </button>
                       </CTableDataCell>
@@ -166,4 +152,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default Managers

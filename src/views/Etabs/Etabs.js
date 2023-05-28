@@ -23,49 +23,49 @@ import {
   CTableRow,
 } from '@coreui/react'
 
-const Users = () => {
-  const [users, setusers] = useState([])
-  const [error, setError] = useState('')
-  const state = useSelector((state) => state.user.users)
-  const content = useSelector((state) => state.content.contents)
-  const dispatch = useDispatch()
+const Etabs = () => {
+  const [etabs, setetabs] = useState([])
   const navigate = useNavigate()
   // get token from localhost
   const token = localStorage.getItem('happytoken')
-  const getAllUsers = async () => {
+  // get all etabls
+  const getAllEtabs = async () => {
     try {
-      const { data } = await axios.get('https://project-happhour.vercel.app/users', {
+      const { data } = await axios.get('https://project-happhour.vercel.app/etabllissments', {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      setusers(data)
+      setetabs(data)
     } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-        setError(error.response.data.message)
-      }
+      console.log(error)
     }
   }
-  // delete user
-  const deleteUser = async (id) => {
+  // delete etab
+  const deleteEtab = async (id) => {
     try {
-      await axios.delete(`https://project-happhour.vercel.app/users/${id}`, {
+      await axios.delete(`https://project-happhour.vercel.app/etabllissments/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      getAllUsers()
+      getAllEtabs()
     } catch (err) {
       console.log(err)
     }
   }
+  // edit etab
   const edit = (id) => {
-    navigate(`/edituser/${id}`)
+    navigate(`/edit/etab/${id}`)
+  }
+  // add new etab
+  const addEtab = () => {
+    navigate('/add/etab')
   }
   // use effect
   useEffect(() => {
-    getAllUsers()
-    console.log('users' + users)
+    getAllEtabs()
+    console.log('users' + etabs)
   }, [])
   // useEffect(() => {
   //   dispatch(fetchContent())
@@ -74,35 +74,15 @@ const Users = () => {
     <>
       <CRow>
         <CCol xs>
-          {/* {state.map((element) => {
-            return (
-              <div key={element.id} style={{ display: 'flex' }}>
-                <h1>{element.username}</h1>
-                <h1>{element.email}</h1>
-                <button onClick={() => dispatch(deleteuser({ id: element.id }))}> delete</button>
-                <button onClick={edit}> edit</button>
-              </div>
-            )
-          })}
-          <div>
-            <button onClick={addnewuser}>add</button>
-          </div> */}
-          {/* <div>
-            <h1>import data from api</h1>
-            {content.map((element) => {
-              return <>{element.username}</>
-            })}
-          </div> */}
           <CCard className="mb-4">
-            {error && <div style={{ color: 'red' }}>{error}</div>}{' '}
             <CCardHeader style={{ display: 'flex' }}>
               <div>
-                <h4>Users List</h4>
+                <h4>Etabs List</h4>
               </div>
               <div style={{ position: 'absolute', right: 0 }}>
-                <button style={{}}>
+                <button onClick={addEtab}>
                   <CIcon icon={icon.cilPlus} style={{ fontsize: '20px' }}></CIcon>
-                  ADD new user
+                  ADD new Etab
                 </button>
               </div>
             </CCardHeader>
@@ -113,33 +93,26 @@ const Users = () => {
                     {/* <CTableHeaderCell className="text-center">
                       <CIcon icon={cilPeople} />
                     </CTableHeaderCell> */}
-                    <CTableHeaderCell>username</CTableHeaderCell>
-
+                    <CTableHeaderCell>EtabName</CTableHeaderCell>
                     <CTableHeaderCell>Email</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">FirstName</CTableHeaderCell>
-                    <CTableHeaderCell>LastName</CTableHeaderCell>
                     <CTableHeaderCell>Phone</CTableHeaderCell>
                     <CTableHeaderCell>Address</CTableHeaderCell>
                     <CTableHeaderCell>Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {users.map((item, index) => (
+                  {etabs.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       {/* // username */}
                       <CTableDataCell>
-                        <div>{item.username}</div>
+                        <div>{item.etab_name}</div>
                       </CTableDataCell>
                       {/* email */}
                       <CTableDataCell className="text-center">{item.email}</CTableDataCell>
-                      {/* firstname */}
-                      <CTableDataCell>{item.firstname}</CTableDataCell>
-                      {/* lastname  */}
-                      <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
                       {/* phone  */}
                       <CTableDataCell>{item.phone}</CTableDataCell>
                       {/* address */}
-                      <CTableDataCell>{item.user_address}</CTableDataCell>
+                      <CTableDataCell>{item.adress}</CTableDataCell>
                       <CTableDataCell>
                         {' '}
                         <button onClick={() => edit(item.id)}>
@@ -150,7 +123,7 @@ const Users = () => {
                             size="xxl"
                           />
                         </button>
-                        <button onClick={() => deleteUser(item.id)}>
+                        <button onClick={() => deleteEtab(item.id)}>
                           <CIcon icon={icon.cilX} size="xxl" />
                         </button>
                       </CTableDataCell>
@@ -166,4 +139,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default Etabs
