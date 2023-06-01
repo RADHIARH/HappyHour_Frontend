@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
 import Adress from '../Adress'
 import '../../../style.css'
 import {
@@ -12,7 +12,6 @@ import {
   CForm,
   CFormInput,
   CInputGroup,
-  CInputGroupText,
   CRow,
   CDropdown,
   CDropdownToggle,
@@ -21,6 +20,7 @@ import {
   CFormLabel,
 } from '@coreui/react'
 import DatePicker from 'react-datepicker'
+import { useSelector } from 'react-redux'
 import 'react-datepicker/dist/react-datepicker.css'
 // import CIcon from '@coreui/icons-react'
 // import { cilLockLocked, cilUser } from '@coreui/icons'
@@ -31,14 +31,19 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
+  const { country, state, city, phone } = useSelector((state) => state.adress)
+  const fulladress = country + '' + state + '' + city + phone
+  const [adress, setadress] = useState(country + state)
   const navigate = useNavigate()
   const [startDate, setStartDate] = useState(new Date())
+  const [role, setrole] = useState('')
+  console.log('startdate' + startDate)
+
   const HandleSelect = (e) => {
     setUser({
       ...User,
       role: e.target.value,
     })
-    console.log(e.target.value)
   }
   const [User, setUser] = useState({
     username: '',
@@ -46,10 +51,12 @@ const Register = () => {
     user_password: '',
     firstname: '',
     lastname: '',
-    phone: '',
-    user_address: '',
+    phone: phone,
+    user_address: country + state + city,
     role: 2,
+    birth: format(startDate, 'yyyy/MM/dd'),
   })
+  console.log('user is ' + JSON.stringify(User))
   const [error, setError] = useState('')
   const HandleChange = (event) => {
     setUser({
@@ -60,12 +67,6 @@ const Register = () => {
 
   const register = async (e) => {
     e.preventDefault()
-    //   try {
-    //     const { data } = await axios.post('https://project-happhour.vercel.app/register', User)
-    //   } catch (error) {
-    //     setError('user already exist')
-    //   }
-    // }
 
     try {
       const url = 'https://project-happhour.vercel.app/register'
@@ -78,17 +79,22 @@ const Register = () => {
       }
     }
   }
+  // useeffect
   useEffect(() => {
-    console.log(error)
-    console.log('selected' + User.role)
-  }, [])
+    setUser({
+      ...User,
+      user_address: country + state + city,
+      phone: phone,
+      birth: format(startDate, 'yyyy / MM / dd'),
+    })
+  }, [country, state, city, phone, startDate])
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
-        <CRow className="justify-content-center">
+        <CRow className="justify-content-start">
           <CCol md={9} lg={7} xl={6}>
-            <CCard className="mx-4 shadow" style={{ width: '900px' }}>
+            <CCard className="mx-4 shadow" style={{ width: '1200px' }}>
               <CCardBody className="p-4">
                 <CForm>
                   <h1>Register</h1>
@@ -139,32 +145,14 @@ const Register = () => {
                       onChange={(date) => setStartDate(date)}
                     />
                   </div>
-
-                  {/* // phone  */}
-                  <CInputGroup className="mb-3 input">
-                    <CFormLabel className="label">Phone Number</CFormLabel>
-                    <CFormInput type="text" name="phone" onChange={HandleChange} />
-                  </CInputGroup>
                   {/* address */}
                   <CInputGroup className="mb-3 input">
                     <CFormLabel className="label">Address</CFormLabel>
                     {/* <CFormInput name="user_address" onChange={HandleChange} /> */}
                     <Adress />
                   </CInputGroup>
-                  {/* <CDropdown className="mb-3">
-                    <CDropdownToggle color="secondary">Choose role</CDropdownToggle>
-                    <CDropdownMenu>
-                      <CDropdownItem value="user" onChange={(e) => setselectedValue(e)}>
-                        User
-                      </CDropdownItem>
-                      <CDropdownItem value="manager">Manager </CDropdownItem>
-                    </CDropdownMenu>
-                  </CDropdown> */}
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <div className="d-flex m-3">
+
+                  <div className="d-flex  " style={{ marginTop: '40px', marginLeft: '10px' }}>
                     <h4>Role</h4>
                     <CDropdown className="m-1">
                       <CDropdownToggle color="secondary" onChange={HandleSelect}>

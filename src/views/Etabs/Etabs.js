@@ -26,7 +26,7 @@ import {
 
 const Etabs = () => {
   const [etabs, setetabs] = useState([])
-  const [filter, setfilter] = useState('')
+  const [filtered, setfilter] = useState('')
   const navigate = useNavigate()
   // get token from localhost
   const token = localStorage.getItem('happytoken')
@@ -38,7 +38,9 @@ const Etabs = () => {
           authorization: `Bearer ${token}`,
         },
       })
+
       setetabs(data)
+      console.log('data' + etabs)
     } catch (error) {
       console.log(error)
     }
@@ -67,9 +69,10 @@ const Etabs = () => {
   // use effect
   useEffect(() => {
     getAllEtabs()
-    console.log(filter)
-    console.log('users' + etabs)
-  }, [filter])
+
+    console.log('etablisssments' + JSON.stringify(etabs))
+    console.log('filter' + filtered)
+  }, [filtered])
   // useEffect(() => {
   //   dispatch(fetchContent())
   // }, [dispatch])
@@ -109,34 +112,36 @@ const Etabs = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {etabs.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
-                      {/* // username */}
-                      <CTableDataCell>
-                        <div>{item.etab_name}</div>
-                      </CTableDataCell>
-                      {/* email */}
-                      <CTableDataCell className="text-center">{item.email}</CTableDataCell>
-                      {/* phone  */}
-                      <CTableDataCell>{item.phone}</CTableDataCell>
-                      {/* address */}
-                      <CTableDataCell>{item.adress}</CTableDataCell>
-                      <CTableDataCell>
-                        {' '}
-                        <button onClick={() => edit(item.id)}>
+                  {etabs
+                    .filter((e) => e.etab_name.toLowerCase().includes(filtered.toLowerCase()))
+                    .map((item, index) => (
+                      <CTableRow v-for="item in tableItems" key={index}>
+                        {/* // username */}
+                        <CTableDataCell>
+                          <div>{item.etab_name}</div>
+                        </CTableDataCell>
+                        {/* email */}
+                        <CTableDataCell className="text-center">{item.email}</CTableDataCell>
+                        {/* phone  */}
+                        <CTableDataCell>{item.phone}</CTableDataCell>
+                        {/* address */}
+                        <CTableDataCell>{item.adress}</CTableDataCell>
+                        <CTableDataCell>
                           {' '}
-                          <CIcon
-                            icon={icon.cilColorBorder}
-                            style={{ marginRight: 20 }}
-                            size="xxl"
-                          />
-                        </button>
-                        <button onClick={() => deleteEtab(item.id)}>
-                          <CIcon icon={icon.cilX} size="xxl" />
-                        </button>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                          <button onClick={() => edit(item.id)}>
+                            {' '}
+                            <CIcon
+                              icon={icon.cilColorBorder}
+                              style={{ marginRight: 20 }}
+                              size="xxl"
+                            />
+                          </button>
+                          <button onClick={() => deleteEtab(item.id)}>
+                            <CIcon icon={icon.cilX} size="xxl" />
+                          </button>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
                 </CTableBody>
               </CTable>
             </CCardBody>

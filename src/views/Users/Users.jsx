@@ -129,7 +129,7 @@ const Users = () => {
                     <CTableHeaderCell className="text-center">FirstName</CTableHeaderCell>
                     <CTableHeaderCell>LastName</CTableHeaderCell>
                     <CTableHeaderCell>Phone</CTableHeaderCell>
-                    <CTableHeaderCell>Address</CTableHeaderCell>
+                    <CTableHeaderCell>Birthdate</CTableHeaderCell>
                     <CTableHeaderCell>Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
@@ -152,6 +152,8 @@ const Users = () => {
                         <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
                         {/* phone  */}
                         <CTableDataCell>{item.phone}</CTableDataCell>
+                        {/* birthdate  */}
+                        <CTableDataCell>{item.birthday}</CTableDataCell>
                         {/* address */}
                         <CTableDataCell>{item.user_address}</CTableDataCell>
                         <CTableDataCell>

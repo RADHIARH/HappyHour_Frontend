@@ -18,9 +18,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from '../src/redux/userSlice'
 import userAPIReducer from './redux/userAPIslice'
+import adressReducer from './redux/adressAPIslice'
 export const store = configureStore({
   reducer: {
     user: userReducer,
     content: userAPIReducer,
+    adress: adressReducer,
   },
 })
