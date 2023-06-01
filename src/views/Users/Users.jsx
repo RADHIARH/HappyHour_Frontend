@@ -21,11 +21,13 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CFormInput,
 } from '@coreui/react'
 
 const Users = () => {
   const [users, setusers] = useState([])
   const [error, setError] = useState('')
+  const [search, setsearch] = useState('')
   const state = useSelector((state) => state.user.users)
   const content = useSelector((state) => state.content.contents)
   const dispatch = useDispatch()
@@ -62,11 +64,13 @@ const Users = () => {
   const edit = (id) => {
     navigate(`/edituser/${id}`)
   }
+
   // use effect
   useEffect(() => {
     getAllUsers()
+
     console.log('users' + users)
-  }, [])
+  }, [search])
   // useEffect(() => {
   //   dispatch(fetchContent())
   // }, [dispatch])
@@ -100,12 +104,18 @@ const Users = () => {
                 <h4>Users List</h4>
               </div>
               <div style={{ position: 'absolute', right: 0 }}>
-                <button style={{}}>
+                <button style={{ margin: 7 }}>
                   <CIcon icon={icon.cilPlus} style={{ fontsize: '20px' }}></CIcon>
                   ADD new user
                 </button>
               </div>
             </CCardHeader>
+            <CFormInput
+              style={{ width: '90%', margin: 20 }}
+              type="text"
+              Placeholder="search user"
+              onChange={(e) => setsearch(e.target.value)}
+            />
             <CCardBody>
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
@@ -124,38 +134,42 @@ const Users = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {users.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
-                      {/* // username */}
-                      <CTableDataCell>
-                        <div>{item.username}</div>
-                      </CTableDataCell>
-                      {/* email */}
-                      <CTableDataCell className="text-center">{item.email}</CTableDataCell>
-                      {/* firstname */}
-                      <CTableDataCell>{item.firstname}</CTableDataCell>
-                      {/* lastname  */}
-                      <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
-                      {/* phone  */}
-                      <CTableDataCell>{item.phone}</CTableDataCell>
-                      {/* address */}
-                      <CTableDataCell>{item.user_address}</CTableDataCell>
-                      <CTableDataCell>
-                        {' '}
-                        <button onClick={() => edit(item.id)}>
+                  {users
+                    .filter((element) =>
+                      element.username.toLowerCase().includes(search.toLowerCase()),
+                    )
+                    .map((item, index) => (
+                      <CTableRow v-for="item in tableItems" key={index}>
+                        {/* // username */}
+                        <CTableDataCell>
+                          <div>{item.username}</div>
+                        </CTableDataCell>
+                        {/* email */}
+                        <CTableDataCell className="text-center">{item.email}</CTableDataCell>
+                        {/* firstname */}
+                        <CTableDataCell>{item.firstname}</CTableDataCell>
+                        {/* lastname  */}
+                        <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
+                        {/* phone  */}
+                        <CTableDataCell>{item.phone}</CTableDataCell>
+                        {/* address */}
+                        <CTableDataCell>{item.user_address}</CTableDataCell>
+                        <CTableDataCell>
                           {' '}
-                          <CIcon
-                            icon={icon.cilColorBorder}
-                            style={{ marginRight: 20 }}
-                            size="xxl"
-                          />
-                        </button>
-                        <button onClick={() => deleteUser(item.id)}>
-                          <CIcon icon={icon.cilX} size="xxl" />
-                        </button>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                          <button onClick={() => edit(item.id)}>
+                            {' '}
+                            <CIcon
+                              icon={icon.cilColorBorder}
+                              style={{ marginRight: 20 }}
+                              size="xxl"
+                            />
+                          </button>
+                          <button onClick={() => deleteUser(item.id)}>
+                            <CIcon icon={icon.cilX} size="xxl" />
+                          </button>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
                 </CTableBody>
               </CTable>
             </CCardBody>

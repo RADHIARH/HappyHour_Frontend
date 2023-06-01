@@ -19,6 +19,7 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CFormInput,
 } from '@coreui/react'
 
 const Managers = () => {
@@ -28,6 +29,7 @@ const Managers = () => {
   // use params
   const { id } = useParams()
   const [managers, setmanagers] = useState([])
+  const [filter, setfilter] = useState('')
   const getAllManagers = async () => {
     try {
       const { data } = await axios.get('https://project-happhour.vercel.app/managers', {
@@ -93,6 +95,12 @@ const Managers = () => {
               </div>
             </CCardHeader>
             <CCardBody>
+              <CFormInput
+                style={{ width: '90%', margin: 20 }}
+                type="text"
+                placeholder="serach manager"
+                onChange={(e) => setfilter(e.target.value)}
+              />
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
@@ -110,38 +118,40 @@ const Managers = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {managers.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
-                      {/* // username */}
-                      <CTableDataCell>
-                        <div>{item.username}</div>
-                      </CTableDataCell>
-                      {/* email */}
-                      <CTableDataCell className="text-center">{item.email}</CTableDataCell>
-                      {/* firstname */}
-                      <CTableDataCell>{item.firstname}</CTableDataCell>
-                      {/* lastname  */}
-                      <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
-                      {/* phone  */}
-                      <CTableDataCell>{item.phone}</CTableDataCell>
-                      {/* address */}
-                      <CTableDataCell>{item.user_address}</CTableDataCell>
-                      <CTableDataCell>
-                        {' '}
-                        <button>
+                  {managers
+                    .filter((e) => e.username.toLowerCase().includes(filter.toLowerCase()))
+                    .map((item, index) => (
+                      <CTableRow v-for="item in tableItems" key={index}>
+                        {/* // username */}
+                        <CTableDataCell>
+                          <div>{item.username}</div>
+                        </CTableDataCell>
+                        {/* email */}
+                        <CTableDataCell className="text-center">{item.email}</CTableDataCell>
+                        {/* firstname */}
+                        <CTableDataCell>{item.firstname}</CTableDataCell>
+                        {/* lastname  */}
+                        <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
+                        {/* phone  */}
+                        <CTableDataCell>{item.phone}</CTableDataCell>
+                        {/* address */}
+                        <CTableDataCell>{item.user_address}</CTableDataCell>
+                        <CTableDataCell>
                           {' '}
-                          <CIcon
-                            icon={icon.cilColorBorder}
-                            style={{ marginRight: 20 }}
-                            size="xxl"
-                          />
-                        </button>
-                        <button onClick={() => deleteManager(item.id)}>
-                          <CIcon icon={icon.cilX} size="xxl" />
-                        </button>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                          <button>
+                            {' '}
+                            <CIcon
+                              icon={icon.cilColorBorder}
+                              style={{ marginRight: 20 }}
+                              size="xxl"
+                            />
+                          </button>
+                          <button onClick={() => deleteManager(item.id)}>
+                            <CIcon icon={icon.cilX} size="xxl" />
+                          </button>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
                 </CTableBody>
               </CTable>
             </CCardBody>

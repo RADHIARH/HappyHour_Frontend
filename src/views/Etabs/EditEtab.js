@@ -24,7 +24,7 @@ import {
 
 const EditEtab = () => {
   const [etab, setetab] = useState({})
-
+  const [file, setfile] = useState()
   const token = localStorage.getItem('happytoken')
   const { id } = useParams()
   // get token from localhost
@@ -50,10 +50,21 @@ const EditEtab = () => {
     })
     console.log(etab)
   }
+  const onfilechange = (e) => {
+    setfile(e.target.files[0])
+    console.log('file' + e.target.files[0])
+  }
   const edit = async (e) => {
     e.preventDefault()
     try {
       await axios.put(`https://project-happhour.vercel.app/etabllissments/${id}`, etab, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      const formData = new FormData()
+      formData.append('profileImg', file)
+      await axios.post(`http://localhost:3001/upload/image/${id}`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -105,6 +116,7 @@ const EditEtab = () => {
                     <CTableHeaderCell>Email</CTableHeaderCell>
                     <CTableHeaderCell>Phone</CTableHeaderCell>
                     <CTableHeaderCell>Address</CTableHeaderCell>
+                    <CTableHeaderCell>Logo</CTableHeaderCell>
                     <CTableHeaderCell>Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
@@ -114,7 +126,7 @@ const EditEtab = () => {
                     <CTableDataCell>
                       <CFormInput
                         type="text"
-                        name="name"
+                        name="etab_name"
                         defaultValue={etab.etab_name}
                         onChange={HandleChange}
                       />
@@ -149,6 +161,10 @@ const EditEtab = () => {
                         defaultValue={etab.adress}
                         onChange={HandleChange}
                       />
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      {' '}
+                      <CFormInput type="file" onChange={onfilechange} />
                     </CTableDataCell>
                     <CTableDataCell>
                       {' '}

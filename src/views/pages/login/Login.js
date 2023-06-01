@@ -44,9 +44,10 @@ const Login = () => {
       })
       const token = data.token
       localStorage.setItem('happytoken', token)
-      if (data.user.id_role === 1) {
-        navigate('/dashboard')
-      }
+      // if (data.user.id_role === 1) {
+      //   navigate('/dashboard')
+      // }
+      navigate('/dashboard')
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status <= 500) {
         setError(error.response.data.message)

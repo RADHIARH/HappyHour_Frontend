@@ -25,6 +25,7 @@ import {
 const AddEtab = () => {
   const [etab, setetab] = useState({})
   const [error, setError] = useState('')
+  const [file, setfile] = useState()
   // get token from localhost
   const token = localStorage.getItem('happytoken')
   const HandleChange = (e) => {
@@ -115,7 +116,6 @@ const AddEtab = () => {
                 <CInputGroup className="mb-3">
                   <CFormInput type="submit" name="submitb " value="Add" />
                 </CInputGroup>
-
                 {error && <CAlert color="danger">{error}</CAlert>}
                 <div id="message" style={{ marginTop: 10, visibility: 'hidden' }}>
                   <CAlert color="primary">Etab has been added !</CAlert>

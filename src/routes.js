@@ -10,6 +10,7 @@ const Managers = React.lazy(() => import('./views/Managers/Managers'))
 const Etabs = React.lazy(() => import('./views/Etabs/Etabs'))
 const editEtab = React.lazy(() => import('./views/Etabs/EditEtab'))
 const addEtab = React.lazy(() => import('./views/Etabs/AddEtab'))
+const profile = React.lazy(() => import('./views/Profile/Profile'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -66,6 +67,7 @@ const routes = [
   { path: '/edituser/:id', name: 'Edituser', element: editUser },
   { path: '/edit/etab/:id', name: 'EditEtab', element: editEtab },
   { path: '/add/etab', name: 'AddEtab', element: addEtab },
+  { path: '/profile/:id', name: 'Profile', element: profile },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },

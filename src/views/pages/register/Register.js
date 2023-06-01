@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import Adress from '../Adress'
+import '../../../style.css'
 import {
   CButton,
   CCard,
@@ -16,9 +18,13 @@ import {
   CDropdownToggle,
   CDropdownMenu,
   CDropdownItem,
+  CFormLabel,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+// import CIcon from '@coreui/icons-react'
+// import { cilLockLocked, cilUser } from '@coreui/icons'
+
 // import axios
 import axios from 'axios'
 //
@@ -26,6 +32,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const navigate = useNavigate()
+  const [startDate, setStartDate] = useState(new Date())
   const HandleSelect = (e) => {
     setUser({
       ...User,
@@ -81,83 +88,68 @@ const Register = () => {
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={6}>
-            <CCard className="mx-4">
+            <CCard className="mx-4 shadow" style={{ width: '900px' }}>
               <CCardBody className="p-4">
                 <CForm>
                   <h1>Register</h1>
                   <p className="text-medium-emphasis">Create your account</p>
                   {/* username */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
-                      <CIcon icon={cilUser} />
-                    </CInputGroupText>
+                  <CInputGroup className="mb-3 input">
+                    <CFormLabel className="label">Username</CFormLabel>
+                    <br></br>
 
-                    <CFormInput placeholder="Username" name="username" onChange={HandleChange} />
+                    <CFormInput name="username" onChange={HandleChange} />
                   </CInputGroup>
                   {/* email */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="Email" name="email" onChange={HandleChange} />
+                  <CInputGroup className="mb-3 input">
+                    {/* <CInputGroupText>@</CInputGroupText> */}
+                    <CFormLabel className="label">Email</CFormLabel>
+                    <CFormInput name="email" onChange={HandleChange} />
                   </CInputGroup>
                   {/* // password  */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
+                  <CInputGroup className="mb-3 input">
+                    {/* <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="password"
-                      placeholder="Password"
-                      name="user_password"
-                      onChange={HandleChange}
-                    />
+                    </CInputGroupText> */}
+                    <CFormLabel className="label">Password</CFormLabel>
+                    <CFormInput type="password" name="user_password" onChange={HandleChange} />
                   </CInputGroup>
                   {/* // firstname  */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
+                  <CInputGroup className="mb-3 input">
+                    {/* <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="text"
-                      placeholder="Firstname"
-                      name="firstname"
-                      onChange={HandleChange}
-                    />
+                    </CInputGroupText> */}
+                    <CFormLabel className="label">First Name</CFormLabel>
+                    <CFormInput type="text" name="firstname" onChange={HandleChange} />
                   </CInputGroup>
                   {/* // lastname  */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
+                  <CInputGroup className="mb-3 input">
+                    {/* <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="text"
-                      placeholder="Lastname"
-                      name="lastname"
-                      onChange={HandleChange}
-                    />
+                    </CInputGroupText> */}
+                    <CFormLabel className="label">Last Name</CFormLabel>
+                    <CFormInput type="text" name="lastname" onChange={HandleChange} />
                   </CInputGroup>
-                  {/* // phone  */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
-                      <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="text"
-                      placeholder="Phone"
-                      name="phone"
-                      onChange={HandleChange}
+                  {/* // birthday  */}
+                  <div className="d-flex m-3">
+                    <CFormLabel className="label">Birthday</CFormLabel>{' '}
+                    <DatePicker
+                      className="input"
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
                     />
+                  </div>
+
+                  {/* // phone  */}
+                  <CInputGroup className="mb-3 input">
+                    <CFormLabel className="label">Phone Number</CFormLabel>
+                    <CFormInput type="text" name="phone" onChange={HandleChange} />
                   </CInputGroup>
                   {/* address */}
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
-                      <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="text"
-                      placeholder="Adress"
-                      name="user_address"
-                      onChange={HandleChange}
-                    />
+                  <CInputGroup className="mb-3 input">
+                    <CFormLabel className="label">Address</CFormLabel>
+                    {/* <CFormInput name="user_address" onChange={HandleChange} /> */}
+                    <Adress />
                   </CInputGroup>
                   {/* <CDropdown className="mb-3">
                     <CDropdownToggle color="secondary">Choose role</CDropdownToggle>
@@ -168,12 +160,28 @@ const Register = () => {
                       <CDropdownItem value="manager">Manager </CDropdownItem>
                     </CDropdownMenu>
                   </CDropdown> */}
-                  <select value={User.role} onChange={HandleSelect}>
-                    <option value={2}>User</option>
-                    <option value={3}>Manager</option>
-                  </select>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <div className="d-flex m-3">
+                    <h4>Role</h4>
+                    <CDropdown className="m-1">
+                      <CDropdownToggle color="secondary" onChange={HandleSelect}>
+                        choose role
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem value={2}>User</CDropdownItem>
+                        <CDropdownItem value={3}>Manager </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                    {/* <select value={User.role} onChange={HandleSelect}>
+                      <option value={2}>User</option>
+                      <option value={3}>Manager</option>
+                    </select> */}
+                  </div>
                   {error && <div style={{ color: 'red' }}>{error}</div>}
-                  <div className="d-grid">
+                  <div className="d-grid m-3">
                     <CButton color="success" onClick={register}>
                       Create Account
                     </CButton>

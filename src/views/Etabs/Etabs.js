@@ -21,10 +21,12 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CFormInput,
 } from '@coreui/react'
 
 const Etabs = () => {
   const [etabs, setetabs] = useState([])
+  const [filter, setfilter] = useState('')
   const navigate = useNavigate()
   // get token from localhost
   const token = localStorage.getItem('happytoken')
@@ -65,8 +67,9 @@ const Etabs = () => {
   // use effect
   useEffect(() => {
     getAllEtabs()
+    console.log(filter)
     console.log('users' + etabs)
-  }, [])
+  }, [filter])
   // useEffect(() => {
   //   dispatch(fetchContent())
   // }, [dispatch])
@@ -87,6 +90,11 @@ const Etabs = () => {
               </div>
             </CCardHeader>
             <CCardBody>
+              <CFormInput
+                type="text"
+                placeholder="serach etab"
+                onChange={(e) => setfilter(e.target.value)}
+              />
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
