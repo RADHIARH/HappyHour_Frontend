@@ -56,7 +56,7 @@ const AddEtab = () => {
     <>
       <CRow>
         <CCol xs>
-          <CCard className="mb-4">
+          <CCard className="mb-4" style={{ width: '800px' }}>
             <CCardHeader style={{ display: 'flex' }}>
               <div>
                 <h4>Add new Etabblissment </h4>

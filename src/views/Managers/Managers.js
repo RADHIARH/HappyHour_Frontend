@@ -28,6 +28,7 @@ const Managers = () => {
   const token = localStorage.getItem('happytoken')
   // use params
   const { id } = useParams()
+  const [error, setError] = useState('')
   const [managers, setmanagers] = useState([])
   const [filter, setfilter] = useState('')
   const getAllManagers = async () => {
@@ -38,8 +39,10 @@ const Managers = () => {
         },
       })
       setmanagers(data)
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+        setError(error.response.data.message)
+      }
     }
   }
   // delete manager
@@ -63,99 +66,87 @@ const Managers = () => {
     <>
       <CRow>
         <CCol xs>
-          {/* {state.map((element) => {
-            return (
-              <div key={element.id} style={{ display: 'flex' }}>
-                <h1>{element.username}</h1>
-                <h1>{element.email}</h1>
-                <button onClick={() => dispatch(deleteuser({ id: element.id }))}> delete</button>
-                <button onClick={edit}> edit</button>
-              </div>
-            )
-          })}
-          <div>
-            <button onClick={addnewuser}>add</button>
-          </div> */}
-          {/* <div>
-            <h1>import data from api</h1>
-            {content.map((element) => {
-              return <>{element.username}</>
-            })}
-          </div> */}
-          <CCard className="mb-4">
-            <CCardHeader style={{ display: 'flex' }}>
-              <div>
-                <h4>Managers List</h4>
-              </div>
-              <div style={{ position: 'absolute', right: 0 }}>
-                {/* <button style={{}}>
+          {error && (
+            <div style={{ color: 'red', fontSize: 20, fontWeight: 'bold' }}>
+              {error.toUpperCase()}
+            </div>
+          )}
+          {!error && (
+            <CCard className="mb-4">
+              <CCardHeader style={{ display: 'flex' }}>
+                <div>
+                  <h4>Managers List</h4>
+                </div>
+                <div style={{ position: 'absolute', right: 0 }}>
+                  {/* <button style={{}}>
                   <CIcon icon={icon.cilPlus} style={{ fontsize: '20px' }}></CIcon>
                   ADD new user
                 </button> */}
-              </div>
-            </CCardHeader>
-            <CCardBody>
-              <CFormInput
-                style={{ width: '90%', margin: 20 }}
-                type="text"
-                placeholder="serach manager"
-                onChange={(e) => setfilter(e.target.value)}
-              />
-              <CTable align="middle" className="mb-0 border" hover responsive>
-                <CTableHead color="light">
-                  <CTableRow>
-                    {/* <CTableHeaderCell className="text-center">
+                </div>
+              </CCardHeader>
+              <CCardBody>
+                <CFormInput
+                  style={{ width: '90%', margin: 20 }}
+                  type="text"
+                  placeholder="serach manager"
+                  onChange={(e) => setfilter(e.target.value)}
+                />
+                <CTable align="middle" className="mb-0 border" hover responsive>
+                  <CTableHead color="light">
+                    <CTableRow>
+                      {/* <CTableHeaderCell className="text-center">
                       <CIcon icon={cilPeople} />
                     </CTableHeaderCell> */}
-                    <CTableHeaderCell>username</CTableHeaderCell>
+                      <CTableHeaderCell>username</CTableHeaderCell>
 
-                    <CTableHeaderCell>Email</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">FirstName</CTableHeaderCell>
-                    <CTableHeaderCell>LastName</CTableHeaderCell>
-                    <CTableHeaderCell>Phone</CTableHeaderCell>
-                    <CTableHeaderCell>Address</CTableHeaderCell>
-                    <CTableHeaderCell>Action</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {managers
-                    .filter((e) => e.username.toLowerCase().includes(filter.toLowerCase()))
-                    .map((item, index) => (
-                      <CTableRow v-for="item in tableItems" key={index}>
-                        {/* // username */}
-                        <CTableDataCell>
-                          <div>{item.username}</div>
-                        </CTableDataCell>
-                        {/* email */}
-                        <CTableDataCell className="text-center">{item.email}</CTableDataCell>
-                        {/* firstname */}
-                        <CTableDataCell>{item.firstname}</CTableDataCell>
-                        {/* lastname  */}
-                        <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
-                        {/* phone  */}
-                        <CTableDataCell>{item.phone}</CTableDataCell>
-                        {/* address */}
-                        <CTableDataCell>{item.user_address}</CTableDataCell>
-                        <CTableDataCell>
-                          {' '}
-                          <button>
+                      <CTableHeaderCell>Email</CTableHeaderCell>
+                      <CTableHeaderCell className="text-center">FirstName</CTableHeaderCell>
+                      <CTableHeaderCell>LastName</CTableHeaderCell>
+                      <CTableHeaderCell>Phone</CTableHeaderCell>
+                      <CTableHeaderCell>Address</CTableHeaderCell>
+                      <CTableHeaderCell>Action</CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody>
+                    {managers
+                      .filter((e) => e.username.toLowerCase().includes(filter.toLowerCase()))
+                      .map((item, index) => (
+                        <CTableRow v-for="item in tableItems" key={index}>
+                          {/* // username */}
+                          <CTableDataCell>
+                            <div>{item.username}</div>
+                          </CTableDataCell>
+                          {/* email */}
+                          <CTableDataCell className="text-center">{item.email}</CTableDataCell>
+                          {/* firstname */}
+                          <CTableDataCell>{item.firstname}</CTableDataCell>
+                          {/* lastname  */}
+                          <CTableDataCell className="text-center">{item.lastname}</CTableDataCell>
+                          {/* phone  */}
+                          <CTableDataCell>{item.phone}</CTableDataCell>
+                          {/* address */}
+                          <CTableDataCell>{item.user_address}</CTableDataCell>
+                          <CTableDataCell>
                             {' '}
-                            <CIcon
-                              icon={icon.cilColorBorder}
-                              style={{ marginRight: 20 }}
-                              size="xxl"
-                            />
-                          </button>
-                          <button onClick={() => deleteManager(item.id)}>
-                            <CIcon icon={icon.cilX} size="xxl" />
-                          </button>
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                </CTableBody>
-              </CTable>
-            </CCardBody>
-          </CCard>
+                            <button>
+                              {' '}
+                              <CIcon
+                                icon={icon.cilColorBorder}
+                                style={{ marginRight: 20 }}
+                                size="xxl"
+                              />
+                            </button>
+                            <button onClick={() => deleteManager(item.id)}>
+                              <CIcon icon={icon.cilX} size="xxl" />
+                            </button>
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))}
+                  </CTableBody>
+                </CTable>
+              </CCardBody>
+            </CCard>
+          )}
         </CCol>
       </CRow>
     </>
